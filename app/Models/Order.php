@@ -29,4 +29,16 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getPrice(): int
+    { 
+        return $this->products->map(function ($product) {
+            return $product->price * $product->pivot->quantity;
+        })->sum();
+    }
+
+    public function getQuantity(): int 
+    {
+        return $this->products->sum('pivot.quantity');
+    }
 }
