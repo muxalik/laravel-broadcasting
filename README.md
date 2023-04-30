@@ -1,66 +1,124 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<h1 align="center">Laravel Broadcasting</h1>
+<p align="center"><a href="https://github.com/josuapsianturi/velflix/blob/main/LICENSE"><img src="https://poser.pugx.org/cpriego/valet-linux/license.svg" alt="License"></a>
 </p>
 
-## About Laravel
+## About
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project is an example of how websockets work, how to listen for messages on frontend and how to broadcast them on backend with Laravel 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+> **Note**
+>   Work is still in Progress
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+> **Note**
+>   I will surely write tests soon
 
-## Learning Laravel
+## Table of Contents
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Testing](#testing)
+* [License](#license)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+<a name="requirements"></a>
+## Requirements
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Package | Version
+--- | ---
+[Node](https://nodejs.org/en/) | V16.16.0+
+[Npm](https://nodejs.org/en/)  | V8.11.0+ 
+[Composer](https://getcomposer.org/)  | V2.2.5+
+[Php](https://www.php.net/)  | V8.1+
+[Mysql](https://www.mysql.com/)  |V5.7+
 
-## Laravel Sponsors
+<a name="installation"></a>
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+> **Warning**
+>   Make sure to follow the requirements first.
 
-### Premium Partners
+Here is how you can run the project locally:
+1. Clone this repo
+    ```sh
+    git clone https://github.com/muxailk/laravel-broadcasting.git
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+1. Go into the project root directory
+    ```sh
+    cd laravel-broadcasting
+    ```
 
-## Contributing
+1. Copy .env.example file to .env file
+    ```sh
+    cp .env.example .env
+    ```
+1. Create database `broadcasting`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Go to `.env` file 
+    - Set database credentials
+    ```sh
+    DB_DATABASE=broadcasting 
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
+    - Make sure to follow your database username and password
+    - Set up pusher
+    ```sh
+    BROADCAST_DRIVER=pusher
+    ```
+     ```sh
+    PUSHER_APP_ID=
+    PUSHER_APP_KEY=
+    PUSHER_APP_SECRET=
+    PUSHER_HOST=
+    PUSHER_PORT=443
+    PUSHER_SCHEME=https
+    PUSHER_APP_CLUSTER=mt1
+    ```
+1. Install PHP dependencies 
+    ```sh
+    composer install
+    ```
 
-## Code of Conduct
+1. Generate key 
+    ```sh
+    php artisan key:generate
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. install front-end dependencies
+    ```sh
+    npm install && npm run dev
+    ```
 
-## Security Vulnerabilities
+1. Run migrations and seeders
+    ```
+    php artisan migrate --seed
+    ```
+    this command will create only admin:
+     > email: admin@mail.com , password: 3jkpmv3put0ndx3q0t83
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Run server 
+    ```sh
+    php artisan serve
+    ```  
+
+1. Run queue worker  
+    ```sh
+    php artisan queue:work
+    ```  
+
+1. Visit `localhost:8000` in your favourite browser
+
+Login with admin credentials or register new account, after that you'll be redirected to dashboard where everything goes by itself. Just enjoy the show)
+
+<a name="testing"></a>
+## Testing
+
+> **Warning** <br>
+> Tests are being written right now. Be sure.
+
+
+
+<a name="license"></a>
 
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Laravel Blog is an open-sourced software licensed under [the MIT license](https://github.com/muxailk/laravel-broadcasting/blob/main/LICENSE)
