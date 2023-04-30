@@ -3,10 +3,14 @@
 namespace App\Providers;
 
 use App\Events\OrderCreated;
+use App\Events\OrderDeleted;
+use App\Events\OrderStatusChanged;
 use App\Events\ProductCreated;
 use App\Events\UserCreated;
 use App\Events\UserLoggedIn;
 use App\Listeners\OrderCreatedListener;
+use App\Listeners\OrderDeletedListener;
+use App\Listeners\OrderStatusChangedListener;
 use App\Listeners\ProductCreatedListener;
 use App\Listeners\UserCreatedListener;
 use App\Listeners\UserLoggedInListener;
@@ -29,14 +33,14 @@ class EventServiceProvider extends ServiceProvider
         UserLoggedIn::class => [
             UserLoggedInListener::class,
         ],
-        UserCreated::class => [
-            UserCreatedListener::class,
-        ],
-        ProductCreated::class => [
-            ProductCreatedListener::class,
-        ],
         OrderCreated::class => [
             OrderCreatedListener::class,
+        ],
+        OrderStatusChanged::class => [
+            OrderStatusChangedListener::class,
+        ],
+        OrderDeleted::class => [
+            OrderDeletedListener::class,
         ],
     ];
 

@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ProductCreated
+class ProductCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,8 +20,7 @@ class ProductCreated
      */
     public function __construct(
         public Product $product
-    )
-    {
+    ) {
         //
     }
 
@@ -33,7 +32,25 @@ class ProductCreated
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new Channel('products'),
+        ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'product.created';
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'product' => [
+                'id' => $this->product->id,
+                'price' => formatPrice(prettyPrice($this->product->calculatePrice())),
+                'discount' => $this->product->discount,
+                'quantity' => $this->product->quantity,
+                'times_bought' => $this->product->times_bought,
+            ]
         ];
     }
 }

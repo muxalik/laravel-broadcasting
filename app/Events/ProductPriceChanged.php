@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderCreated implements ShouldBroadcast
+class ProductPriceChanged implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,7 +19,7 @@ class OrderCreated implements ShouldBroadcast
      * Create a new event instance.
      */
     public function __construct(
-        public Order $order
+        public Product $product
     ) {
         //
     }
@@ -32,24 +32,22 @@ class OrderCreated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('orders'),
+            new Channel('products'),
         ];
     }
 
     public function broadcastAs(): string
     {
-        return 'order.created';
+        return 'product.price.changed';
     }
 
     public function broadcastWith(): array
     {
         return [
-            'order' => [
-                'id' => $this->order->id,
-                'username' => $this->order->user->name,
-                'price' => formatPrice($this->order->getPrice()),
-                'quantity' => $this->order->getQuantity(),
-                'status' => $this->order->status,
+            'product' => [
+                'id' => $this->product->id,
+                'price' => formatPrice(prettyPrice($this->product->calculatePrice())),
+                'discount' => $this->product->discount,
             ]
         ];
     }

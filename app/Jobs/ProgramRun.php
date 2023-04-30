@@ -8,6 +8,7 @@ use App\Events\UserCreated;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,45 +34,46 @@ class ProgramRun implements ShouldQueue
      */
     public function handle(): void
     {
-        $userCount = User::nonAdmin()->count();
-        $productCount = Product::count();
-        $orderCount = Order::count();
+        $userCount = User::nonAdmin()->count() + 3;
+        $productCount = Product::count() + 3;
+        $orderCount = Order::count() + 3;
+
+        CreateProduct::dispatch()->delay(now()->addSeconds(1));
+        CreateProduct::dispatch()->delay(now()->addSeconds(3));
+        CreateProduct::dispatch()->delay(now()->addSeconds(7));
+
+        CreateUser::dispatch()->delay(now()->addSeconds(1));
+        CreateUser::dispatch()->delay(now()->addSeconds(3));
+        CreateUser::dispatch()->delay(now()->addSeconds(7));
+
+        CreateOrder::dispatch()->delay(now()->addSeconds(1));
+        CreateOrder::dispatch()->delay(now()->addSeconds(3));
+        CreateOrder::dispatch()->delay(now()->addSeconds(7));
+        
+        $i = 0;
 
         while (true) {
             if ($userCount < 10) {
-                $user = User::factory()->create();
-                $userCount++;
+                CreateUser::dispatch()->delay(now()->addSeconds(20 * ($i + 1)));
 
-                event(new UserCreated($user));
+                $userCount++;
             }
 
             if ($productCount < 10) {
-                $product = Product::factory()->create();
-                $productCount++;
+                CreateProduct::dispatch()->delay(now()->addSeconds(20 * ($i + 1)));
 
-                event(new ProductCreated($product));
+                $productCount++;
             }
 
             if ($orderCount < 10) {
-                $order = Order::factory()->create();
-                $products = Product::take(mt_rand(2, 5))->get();
-
-                $products->each(function ($product) use ($order) {
-                    $quantity = mt_rand(1, 5);
-
-                    $product->orders()->attach($order->id, [
-                        'quantity' => $quantity,
-                    ]);
-                });
-
+                CreateOrder::dispatch()->delay(now()->addSeconds(15 * ($i + 1)));
+                
                 $orderCount++;
-
-                event(new OrderCreated($order));
             }
+            
+            ChangeProductPrice::dispatch()->delay(now()->addSeconds(10 * ($i + 1)));
 
-            if ($orderCount >= 10 && $productCount >= 10 && $userCount >= 10) {
-                break;
-            }
+            $i++;
         }
     }
 }

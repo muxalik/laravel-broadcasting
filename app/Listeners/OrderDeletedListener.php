@@ -2,12 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\UserCreated;
+use App\Events\OrderDeleted;
+use App\Jobs\CreateOrder;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
-class UserCreatedListener
+class OrderDeletedListener
 {
     /**
      * Create the event listener.
@@ -20,8 +21,10 @@ class UserCreatedListener
     /**
      * Handle the event.
      */
-    public function handle(UserCreated $event): void
+    public function handle(OrderDeleted $event): void
     {
-        Log::info('user created', ['id' => $event->user->id]);
+        Log::info('Order deleted', ['order_id' => $event->id]);
+
+        CreateOrder::dispatch()->delay(now()->addSeconds(10));
     }
 }

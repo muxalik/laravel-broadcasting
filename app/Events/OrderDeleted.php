@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderCreated implements ShouldBroadcast
+class OrderDeleted implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,8 +19,9 @@ class OrderCreated implements ShouldBroadcast
      * Create a new event instance.
      */
     public function __construct(
-        public Order $order
-    ) {
+        public int $id
+    )
+    {
         //
     }
 
@@ -36,21 +37,15 @@ class OrderCreated implements ShouldBroadcast
         ];
     }
 
-    public function broadcastAs(): string
+    public function broadcastAs(): string 
     {
-        return 'order.created';
+        return 'order.deleted';
     }
 
-    public function broadcastWith(): array
+    public function broadcastWith(): array 
     {
         return [
-            'order' => [
-                'id' => $this->order->id,
-                'username' => $this->order->user->name,
-                'price' => formatPrice($this->order->getPrice()),
-                'quantity' => $this->order->getQuantity(),
-                'status' => $this->order->status,
-            ]
+            'id' => $this->id,
         ];
     }
 }
