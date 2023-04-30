@@ -17,22 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(1)->create();
-        $products = Product::factory(1)->create();
-        $order = Order::factory()->create();
-
-        $products->random(mt_rand(1, $products->count()))->each(function ($product) use ($order) {
-            $quantity = mt_rand(1, 5);
-            
-            $product->orders()->attach($order->id, [
-                'quantity' => $quantity,
-            ]);
-        });
-
         User::factory()->create([
             'name' => 'Admin',
-            'email' => 'admin@mail.ru',
-            'password' => bcrypt('password'),
+            'email' => 'admin@mail.com',
+            'password' => bcrypt('3jkpmv3put0ndx3q0t83'),
         ]);
     }
 }

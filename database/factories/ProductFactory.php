@@ -20,7 +20,8 @@ class ProductFactory extends Factory
             'title' => ucfirst(fake()->word()),
             'price' => prettyPrice(fake()->numberBetween(1000, 10000)),
             'discount' => fake()->randomElement(range(0, 50, 5)),
-            'quantity' => fake()->numberBetween(3, 100),
+            'quantity' => fake()->numberBetween(20, 100),
+            'times_bought' => 0,
         ];
     }
 }
